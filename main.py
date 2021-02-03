@@ -75,8 +75,8 @@ def main():
         try:
             dp.add_handler(CommandHandler(key, GetCMDCallBack(key,txt)))
         except ValueError as error:
-            log.error("Not register {} because error".format(key))
-            log.exception(error)
+            log.warning("Not register {} because error".format(key), exc_info=True)
+            #log.exception(error)
             continue
         FCL.insert(-1,key)
     log.info("Finally i registered these commands: {}".format(str(FCL)))
