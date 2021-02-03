@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys, re, logging, requests, json, emoji
+import sys, re, logging, requests, json, emoji, traceback
 exit = sys.exit
 from telegram.ext import Updater, MessageHandler, CommandHandler, CallbackContext
 from telegram.ext.filters import Filters
@@ -72,16 +72,13 @@ def main():
         key = x["Key"]
         txt = x["Text"]
         log.info("Registering {} command with '{}'".format(key,txt))
-        if not isEnglish(key):
-            log.warning("Not register {} because not english".format(key))
+        try:
+            dp.add_handler(CommandHandler(key, GetCMDCallBack(key,txt)))
+        except ValueError as error:
+            log.error("Not register {} because error:".format(key))
+            traceback.print_exc()
             continue
-        elif contain_emoji(txt):
-            log.warning("Not register {} because text contain emoji".format(key))
-            continue
-        elif invalid(txt):
-            log.warning("Not register {} because text contain invalid char".format(key))
-        dp.add_handler(CommandHandler(key, GetCMDCallBack(key,txt)))
-        FCl = FCL + [key]
+        FCL.insert(-1,key)
     log.info("Finally i registered these commands: {}".format(str(FCL)))
     updater.start_polling()
     log.info("Started the bot! Use Ctrl-C to stop it.")
