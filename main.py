@@ -57,7 +57,7 @@ def main():
         log.error("HTTP Error {}".format(str(RGR.status_code)))
         exit(4)
     RGR.encoding = "unicode"
-    print(RGR.text.splitlines()[0].rstrip('\n'))
+    # print(RGR.text.splitlines()[0].rstrip('\n'))
     CLST = json.loads(RGR.text.splitlines()[0].rstrip('\n'))
     tok = token()
     try:
